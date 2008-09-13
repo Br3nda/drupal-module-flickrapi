@@ -1,0 +1,4 @@
+; $Id: 
+name = FlickrAPI
+description = Use Flickr APIs with Drupal using phpFlickr
+package = Flickr
