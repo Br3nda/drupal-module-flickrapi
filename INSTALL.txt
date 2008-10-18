@@ -1,4 +1,4 @@
-// $Id: 
+// $Id: INSTALL.txt,v 1.2 2008/10/18 06:27:40 bjshell Exp $
 
 INSTALLATION:
 

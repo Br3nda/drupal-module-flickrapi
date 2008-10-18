@@ -1,4 +1,5 @@
-; $Id: 
+; $Id: flickrapi.info,v 1.2 2008/10/18 06:27:40 bjshell Exp $
 name = FlickrAPI
 description = Use Flickr APIs with Drupal using phpFlickr
 package = Flickr
+core = 6.x
