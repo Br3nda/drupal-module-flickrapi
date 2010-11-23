@@ -1,20 +1,32 @@
 <?php
-// $Id: flickrapi.module,v 1.2 2008/10/18 06:27:40 bjshell Exp $
+// $Id: flickrapi.module,v 1.3 2010/11/23 02:58:28 taniwha Exp $
 
 /**
- * Implementation of hook_menu().
+ * Implements hook_menu().
  */
 function flickrapi_menu() {
   $items = array();
-  $items['admin/settings/flickrapi'] = array(
+  $items['admin/config/flickrapi'] = array(
     'title' => 'Flickr API Settings',
     'description' => 'Configure Flickr API credentials.',
-    'access arguments' => array('administer site configuration'),
+    'access arguments' => array('configure_flickr_api'),
     'type' => MENU_NORMAL_ITEM,
     'page callback' => 'drupal_get_form',
     'page arguments' => array('flickrapi_admin_settings')
   );
   return $items;
+}
+
+/** 
+ * Implements hook_permission().
+ */
+function flickrapi_permission() {
+  return array('configure_flickr_api' =>
+    array(
+      'title' => t('Configure Flickr API'),
+      'description' => t('Set API keys and cache times for flickr queries'),
+    )
+  );
 }
 
 function flickrapi_admin_settings() {
@@ -72,7 +84,7 @@ function flickrapi_phpFlickr() {
   if (!$api_key) {
     drupal_set_message(t("Flickr API key not set"), 'error');
     if (user_access('Administer global flickr api settings')) {
-      drupal_set_message(t("Goto !link to configure the Flickr API settings", array('!link' => l('admin/settings/flickrapi', 'admin/settings/flickrapi'))));
+      drupal_set_message(t("Goto !link to configure the Flickr API settings", array('!link' => l('admin/config/flickrapi', 'admin/config/flickrapi'))));
     }
   }
   $flickr = new phpFlickr($api_key);
