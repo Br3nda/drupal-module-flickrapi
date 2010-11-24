@@ -1,5 +1,5 @@
 <?php
-// $Id: flickrapi.module,v 1.2.2.1 2010/11/23 03:30:45 taniwha Exp $
+// $Id: flickrapi.module,v 1.2.2.2 2010/11/24 02:00:50 taniwha Exp $
 
 /**
  * Implementation of hook_menu().
@@ -59,12 +59,17 @@ function flickrapi_admin_settings() {
 function flickrapi_admin_settings_validate($form, &$form_state) {
   $key = trim($form_state['values']['flickrapi_api_key']);
   $sec = trim($form_state['values']['flickrapi_api_secret']);
+  $cache_dir = $form_state['values']['flickrcachepath'];
 	
   if ($key && (preg_match('/^[A-Fa-f\d]{32}$/', $key) != 1)) {
     form_set_error('flickrapi_api_key', t('This does not appear to be a Flickr API key.'));
   }
   if ($sec && (preg_match('/^[A-Fa-f\d]{16}$/', $sec) != 1)) {
     form_set_error('flickrapi_api_secret', t('This does not appear to be a Flickr API secret.'));
+  }
+
+  if(!is_dir($cache_dir)) {
+    form_set_error('flickrcachepath', t('Folder does not exist.'));
   }
 }
 
