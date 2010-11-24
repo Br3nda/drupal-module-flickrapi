@@ -1,5 +1,5 @@
 <?php
-// $Id: flickrapi.module,v 1.3 2010/11/23 02:58:28 taniwha Exp $
+// $Id: flickrapi.module,v 1.3.2.1 2010/11/24 02:01:43 taniwha Exp $
 
 /**
  * Implements hook_menu().
@@ -55,6 +55,14 @@ function flickrapi_admin_settings() {
     '#default_value' => variable_get('flickrapi_cache_duration', 3600),
     '#description' => t("The refresh interval indicating how often you want to check cached Flickr API calls are up to date."),
   );
+
+  $form['flickrcachepath'] = array(
+    '#title' => t('Flickr Cache Path'),
+    '#required' => TRUE,
+    '#description' => t('Location on server file system where results of Flickr API calls can be cached.'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('flickrcachepath', '/tmp'),
+  );
   
   $form['#validate'][] = 'flickrapi_admin_settings_validate';
   return system_settings_form($form);
@@ -63,12 +71,17 @@ function flickrapi_admin_settings() {
 function flickrapi_admin_settings_validate($form, &$form_state) {
   $key = trim($form_state['values']['flickrapi_api_key']);
   $sec = trim($form_state['values']['flickrapi_api_secret']);
+  $cache_dir = $form_state['values']['flickrcachepath'];
 	
   if ($key && (preg_match('/^[A-Fa-f\d]{32}$/', $key) != 1)) {
     form_set_error('flickrapi_api_key', t('This does not appear to be a Flickr API key.'));
   }
   if ($sec && (preg_match('/^[A-Fa-f\d]{16}$/', $sec) != 1)) {
     form_set_error('flickrapi_api_secret', t('This does not appear to be a Flickr API secret.'));
+  }
+
+  if(!is_dir($cache_dir)) {
+    form_set_error('flickrcachepath', t('Folder does not exist.'));
   }
 }
 
